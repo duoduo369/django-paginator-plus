@@ -16,7 +16,7 @@ class PaginatorMixin(object):
     PREV_PAGE_TEXT = u'prev page'
     NEXT_PAGE_TEXT = u'next page'
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         self.page_num
 
     @property
@@ -29,15 +29,15 @@ class PaginatorMixin(object):
 
     @property
     def PAGE_RANGE(self):
-        start = max(0, self.page_num - int(math.ceil(self.DISPLAY_PAGES / 2)))
-        end = start + self.DISPLAY_PAGES
+        start = max(1, self.page_num - int(math.ceil(self.DISPLAY_PAGES / 2)))
+        end = start + self.DISPLAY_PAGES - 1
         if end > self.MAX_PAGE_NUM:
             end = self.MAX_PAGE_NUM
-            start = max(0, self.MAX_PAGE_NUM - self.DISPLAY_PAGES)
-        return (start, end)
+            start = max(1, self.MAX_PAGE_NUM - self.DISPLAY_PAGES)
+        return range(start, end+1)
 
 
-class Paginator(PaginatorMixin, DjangoPaginator):
+class Paginator(DjangoPaginator, PaginatorMixin):
     def __init__(self, object_list, per_page, page_num, orphans=0,
                  allow_empty_first_page=True, **extra_data):
         self.page_num = page_num
