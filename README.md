@@ -1,10 +1,9 @@
 django-paginator-plus
 ===
 
-Save extra data to django paginator.
-Useful when url has params.
+Want to save the url params and get a format page_range?
 
-What to save the url params and get a format page_range?
+This package save extra data to django paginator. Useful when url has params.
 
 `http://myhost/something?page=10&a=1 --> [?page=8&a=1, ?page=9&a=1, ?page=10&a=1, ?page=11&a=1, ?page=12&a=1]`
 

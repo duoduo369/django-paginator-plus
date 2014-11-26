@@ -6,14 +6,20 @@ from setuptools import setup
 
 version = __import__('paginator_plus').__version__
 
-LONG_DESCRIPTION = """django paginator plus"""
+LONG_DESCRIPTION = """
+Want to save the url params and get a format page_range?
+
+This package save extra data to django paginator. Useful when url has params.
+
+`http://myhost/something?page=10&a=1 --> [?page=8&a=1, ?page=9&a=1, ?page=10&a=1, ?page=11&a=1, ?page=12&a=1]`
+"""
 
 
 def long_description():
-    """Return long description from README.rst if it's present
+    """Return long description from README.md if it's present
     because it doesn't get installed."""
     try:
-        return open(join(dirname(__file__), 'README.me')).read()
+        return open(join(dirname(__file__), 'README.md')).read()
     except IOError:
         return LONG_DESCRIPTION
 
