@@ -6,7 +6,7 @@ Useful when url has params.
 
 What to save the url params and get a format page_range?
 
-http://myhost/something?page=10&a=1 --> [?page=8&a=1, ?page=9&a=1, ?page=10&a=1, ?page=11&a=1, ?page=12&a=1]
+`http://myhost/something?page=10&a=1 --> [?page=8&a=1, ?page=9&a=1, ?page=10&a=1, ?page=11&a=1, ?page=12&a=1]`
 
 Document
 ---
@@ -16,11 +16,13 @@ Paginator
 Like django default Paginator, it rewrite page_range, and page.
 
 init params:
+
     all Django Paginator params
     curr_page -- paginator current page num.
     display_pages -- if have 100 page, display_pages will only display the pages in page_range method.
 
 rewrite method or property:
+
     page_range
         Default Django Paginator will return 1 to max page. [1..100]
         Here will use curr_page and display_pages to return the page_range.
@@ -37,7 +39,7 @@ RequestPaginator
 Like Paginator, but in take some extra params to get the querystring page_range.
 
 page_range is like Paginator.page_range, but it not only return a number list.
-It will has querystring too, like [?page=8&a=1, ?page=9&a=1, ?page=10&a=1, ?page=11&a=1, ?page=12&a=1].
+It will has querystring too, like `[?page=8&a=1, ?page=9&a=1, ?page=10&a=1, ?page=11&a=1, ?page=12&a=1]`.
 This is useful when handler front end paginator(or you can use a js lib).
 
 Simple Usage
