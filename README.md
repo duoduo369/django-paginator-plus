@@ -15,6 +15,11 @@ RequestPaginator will give you a list to deal with you paginator logic.
 
     [{'current': True, 'clickable': False, 'url_params': '/questions?a=1&page=1', 'text': 1}, {'current': False, 'clickable': True, 'url_params': '/questions?a=1&page=2', 'text': 2}, {'current': False, 'clickable': True, 'url_params': '/questions?a=1&page=3', 'text': 3}, {'current': False, 'clickable': True, 'url_params': '/questions?a=1&page=4', 'text': 4}, {'current': False, 'clickable': True, 'url_params': '/questions?a=1&page=5', 'text': 5}, {'current': False, 'clickable': True, 'url_params': '/questions?a=1&page=6', 'text': 6}, {'current': False, 'clickable': False, 'url_params': '', 'text': '...'}, {'current': False, 'clickable': True, 'url_params': '/questions?a=1&page=54', 'text': 54}, {'current': False, 'clickable': True, 'url_params': '/questions?a=1&page=2', 'text': u'Next'}]
 
+Install
+---
+
+    pip install django-paginator-plus
+
 Document
 ---
 
