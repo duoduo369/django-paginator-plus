@@ -5,7 +5,15 @@ Want to save the url params and get a format page_range?
 
 This package save extra data to django paginator. Useful when url has params.
 
-`http://myhost/something?page=10&a=1 --> [?page=8&a=1, ?page=9&a=1, ?page=10&a=1, ?page=11&a=1, ?page=12&a=1]`
+If you want to get page rang like below, then Use RequestPaginator.
+
+    Previous 1 ... 2 3 4 5 ... 3000 Next
+    Previous 1 2 3 4 5 ... 3000 Next
+    1 2 3 4 5 ... 3000 Next
+
+RequestPaginator will give you a list to deal with you paginator logic.
+
+    [{'current': True, 'clickable': False, 'url_params': '/questions?a=1&page=1', 'text': 1}, {'current': False, 'clickable': True, 'url_params': '/questions?a=1&page=2', 'text': 2}, {'current': False, 'clickable': True, 'url_params': '/questions?a=1&page=3', 'text': 3}, {'current': False, 'clickable': True, 'url_params': '/questions?a=1&page=4', 'text': 4}, {'current': False, 'clickable': True, 'url_params': '/questions?a=1&page=5', 'text': 5}, {'current': False, 'clickable': True, 'url_params': '/questions?a=1&page=6', 'text': 6}, {'current': False, 'clickable': False, 'url_params': '', 'text': '...'}, {'current': False, 'clickable': True, 'url_params': '/questions?a=1&page=54', 'text': 54}, {'current': False, 'clickable': True, 'url_params': '/questions?a=1&page=2', 'text': u'Next'}]
 
 Document
 ---
@@ -53,7 +61,7 @@ page_params_range: will return a list, each element is a dict, has those params:
 
 
 
-[{'current': True, 'clickable': False, 'url_params': '/questions?a=1&page=1', 'text': 1}, {'current': False, 'clickable': True, 'url_params': '/questions?a=1&page=2', 'text': 2}, {'current': False, 'clickable': True, 'url_params': '/questions?a=1&page=3', 'text': 3}, {'current': False, 'clickable': True, 'url_params': '/questions?a=1&page=4', 'text': 4}, {'current': False, 'clickable': True, 'url_params': '/questions?a=1&page=5', 'text': 5}, {'current': False, 'clickable': True, 'url_params': '/questions?a=1&page=6', 'text': 6}, {'current': False, 'clickable': False, 'url_params': '', 'text': '...'}, {'current': False, 'clickable': True, 'url_params': '/questions?a=1&page=54', 'text': 54}, {'current': False, 'clickable': True, 'url_params': '/questions?a=1&page=2', 'text': u'Next'}]
+    [{'current': True, 'clickable': False, 'url_params': '/questions?a=1&page=1', 'text': 1}, {'current': False, 'clickable': True, 'url_params': '/questions?a=1&page=2', 'text': 2}, {'current': False, 'clickable': True, 'url_params': '/questions?a=1&page=3', 'text': 3}, {'current': False, 'clickable': True, 'url_params': '/questions?a=1&page=4', 'text': 4}, {'current': False, 'clickable': True, 'url_params': '/questions?a=1&page=5', 'text': 5}, {'current': False, 'clickable': True, 'url_params': '/questions?a=1&page=6', 'text': 6}, {'current': False, 'clickable': False, 'url_params': '', 'text': '...'}, {'current': False, 'clickable': True, 'url_params': '/questions?a=1&page=54', 'text': 54}, {'current': False, 'clickable': True, 'url_params': '/questions?a=1&page=2', 'text': u'Next'}]
 
 Simple Usage
 ---
