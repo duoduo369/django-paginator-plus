@@ -2,10 +2,7 @@
 import math
 from copy import copy
 from urllib import urlencode
-
-from django.core.paginator import Page as DjangoPage
 from django.core.paginator import Paginator as DjangoPaginator
-from django.core.paginator import EmptyPage
 
 
 class PaginatorMixin(object):
@@ -20,13 +17,11 @@ class PaginatorMixin(object):
 
 class RequestPaginatorMixin(PaginatorMixin):
     def __init__(self, request=None, page_num_param=u'page',
-                first_text=u'first', last_text=u'last',
-                show_first=True, show_last=True,
-                show_prev=True, show_next=True,
-                prev_page_text=u'prev page', next_page_text=u'next page',
-                auto_hide_prev=True, auto_hide_next=True,
-                url_path='',
-                *args, **kwargs):
+                 show_prev=True, show_next=True,
+                 prev_page_text=u'Previous', next_page_text=u'Next',
+                 auto_hide_prev=True, auto_hide_next=True,
+                 url_path='',
+                 *args, **kwargs):
         assert request, 'request must not be None'
         self._request = request
         if not url_path:
@@ -34,10 +29,6 @@ class RequestPaginatorMixin(PaginatorMixin):
         self.url_path = url_path
         self.get_params = request.GET.dict()
         self.page_num_param = page_num_param
-        self.first_text = first_text
-        self.last_text = last_text
-        self.show_first = show_first
-        self.show_last = show_last
         self.show_prev = show_prev
         self.show_next = show_next
         self.prev_page_text = prev_page_text
@@ -55,7 +46,7 @@ class RequestPaginatorMixin(PaginatorMixin):
 def validate_number_patch(paginator, curr_page):
     if curr_page < 1:
         if paginator.allow_empty_first_page:
-            p.curr_page = 1
+            paginator.curr_page = 1
     if curr_page > paginator.num_pages:
        paginator.curr_page = paginator.num_pages
 
@@ -99,17 +90,65 @@ class RequestPaginator(DjangoPaginator, RequestPaginatorMixin):
 
     @property
     def page_range(self):
+        return paginator_page_range(self)
+
+    @property
+    def page_params_range(self):
         '''
-        if you display_pages = 10, curr_page = 10
-        page_range will be [5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+         from left to right might be
+
+             Previous 1 ... 2 3 4 5 ... 3000 Next
+             Previous 1 2 3 4 5 ... 3000 Next
+             1 2 3 4 5 ... 3000 Next
+        all depand on you
+
         '''
-        _range = paginator_page_range(self)
-        _page_range = []
-        _params = copy(self.get_params)
-        for i in _range:
-            _params[self.page_num_param] = i
-            _page_range.append('{}?{}'.format(self.url_path, urlencode(_params)))
-        return _page_range
+        def get_page_url(_params, page_num):
+            _params[self.page_num_param] = page_num
+            return '{}?{}'.format(self.url_path, urlencode(_params))
+
+        def get_page_meta_dict(text, url_params, clickable=True, current=False):
+            return {
+                'clickable': clickable,
+                'current': current,
+                'text': text,
+                'url_params': url_params
+            }
+
+        _page_range = self.page_range
+        page_rage = []
+        params = copy(self.get_params)
+        if self.show_prev:
+            if self.curr_page == 1:
+                # in first page
+                if not self.auto_hide_prev:
+                    page_rage.append(get_page_meta_dict(self.prev_page_text, get_page_url(params, 1), clickable=False))
+            else:
+                page_rage.append(get_page_meta_dict(self.prev_page_text, get_page_url(params, self.curr_page-1)))
+
+        if _page_range[0] != 1:
+            page_rage.append(get_page_meta_dict(1, get_page_url(params, 1)))
+            page_rage.append(get_page_meta_dict('...', '', clickable=False))
+
+        for pr in _page_range:
+            meta_dict = get_page_meta_dict(pr, get_page_url(params, pr))
+            if pr == self.curr_page:
+                meta_dict['current'] = True
+                meta_dict['clickable'] = False
+            page_rage.append(meta_dict)
+
+        if _page_range[len(_page_range)-1] < self.num_pages:
+            page_rage.append(get_page_meta_dict('...', '', clickable=False))
+            page_rage.append(get_page_meta_dict(self.num_pages, get_page_url(params, self.num_pages)))
+
+        if self.show_next:
+            if self.curr_page >= self.num_pages:
+                if not self.auto_hide_next:
+                    page_rage.append(get_page_meta_dict(self.next_page_text, get_page_url(params, self.num_pages), clickable=False))
+            else:
+                page_rage.append(get_page_meta_dict(self.next_page_text, get_page_url(params, self.curr_page+1)))
+
+        return page_rage
 
     @property
     def page(self):
