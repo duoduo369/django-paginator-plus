@@ -11,6 +11,8 @@ class PaginatorMixin(object):
     '''
 
     def __init__(self, display_pages=10, curr_page=1, **kwargs):
+        display_pages = int(display_pages)
+        curr_page = int(curr_page)
         self.display_pages = display_pages
         self.curr_page = curr_page
 
